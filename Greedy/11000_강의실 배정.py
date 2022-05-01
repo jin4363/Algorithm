@@ -1,22 +1,20 @@
 import sys
+import heapq
 input = sys.stdin.readline
 
 n = int(input().strip())
 timeList = []
 for _ in range(n):
     timeList.append(list(map(int,input().split())))
-    
 timeList.sort(key=lambda x : x[0])
-cnt = 0
-using = set()
-for i in timeList :
-    if not using :
-        for num in range(i[0],i[1]+1):
-            using.add(num)
+room = []
+heapq.heappush(room,timeList[0][1])
+
+for i in range(1,n):
+    if timeList[i][0] < room[0] :
+        heapq.heappush(room,timeList[i][1])
     else :
-        if i[0] in using :
-            cnt +=1
-        else :
-            for num in range(i[0],i[1]+1):
-                using.add(num)
-print(cnt)
+        heapq.heappop(room)
+        heapq.heappush(room,timeList[i][1])
+        
+print(len(room))
